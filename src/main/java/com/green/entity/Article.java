@@ -35,6 +35,11 @@ public class Article {
 		this.title = title;
 		this.content = content;
 	}
+
+	public Article toEntity() {
+		Article article = new Article(null, title, content);
+		return article;
+	}
 	
 	// toString - relation(외래키 설정시)할 때 오류날  수 있어서 @로 하는것이 낫다.
 //	@Override

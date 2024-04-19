@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.green.dto.ArticleDto;
 import com.green.dto.ArticleForm;
@@ -129,7 +130,22 @@ public class ArticleController {
 	}
 	
 	//데이터 삭제
-	@GetMapping("/articles/Delete")
+	@GetMapping("/articles/{id}/Delete")
+	public String delete(  @PathVariable Long id,
+			              RedirectAttributes rttr ) {
+		// 1. 삭제할 대상을 검색한다
+		Article target = articleRepository.findById(id).orElse(null);
+		// 2. 대상 Entity를 삭제한다.
+		if(target != null) {
+			articleRepository.delete(target);
+			//RedirectAttributes : 리다이렉트 페이지에서 사용할 데이터를 
+			// 한 번 사용하면 사라지는 휘발성 데이터
+			//삭제 후 임시메세지를 list.mustache가 출력한다
+			rttr.addFlashAttribute("msg",id+"번 자료가 삭제되었습니다.");
+		}
+		
+		return "redirect:/articles/list";
+	}
 	
 
 }
